@@ -21,4 +21,7 @@ db.sqlite3
 .DS_Store
 Thumbs.db
 
-.extrafeaturescode.txt/
+
+extrafeaturescode.txt
+
+README.md
