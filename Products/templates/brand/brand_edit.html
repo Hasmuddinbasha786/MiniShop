@@ -1,0 +1,68 @@
+
+
+{% extends "base.html" %}
+
+{% block title %}Edit brand{% endblock title %}
+
+{% block sub_navbar %}
+<nav class="navbar navbar-expand-lg bg-light mt-2">
+    <div class="container-fluid">
+        <a href="{% url 'brandlist' %}" class="navbar-brand custom-style">brand List</a>
+
+        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#brandNav"
+            aria-controls="brandNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="brandNav">
+            <div class="navbar-nav ms-auto">
+                <a href="{% url 'brandlist' %}" class="nav-link">brand List</a>
+                <a href="#" class="nav-link active">Edit brand</a>
+            </div>
+        </div>
+    </div>
+</nav>
+{% endblock sub_navbar %}
+
+
+
+
+{% block content %}
+
+<div class="container mt-4 mb-4">
+    <div class="p-4" style="background-color: rgb(200, 220, 238); border-radius: 10px;">
+        <h4 class="mb-4 text-center">Edit Brand</h4>
+
+        <form method="post" class="mb-3">
+            {% csrf_token %}
+            <div class="row g-3 justify-content-center">
+
+                <div class="com-md-4">
+                    <label for="" class="form-label">Category Name</label>
+                    <select name="category" class="form-select" required id="">
+                        {% for cat in categories %}
+                        <option value="{{ cat.id }}" {% if cat.id == brand.category_id %}
+                        selected
+                        {% endif %}>{{ cat.name }}</option>
+                        
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="col-md-12">
+                    <label for="" class="form-label">Brand Name</label>
+                    <input type="text" name="name" class="form-control" value="{{ brand.name }}" required>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-success w-100">Update</button>
+                </div>
+                <div class="col-md-3">
+                    <a href="{% url 'brandlist' %}" class="btn btn-primary w-100">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+{% endblock content %}
