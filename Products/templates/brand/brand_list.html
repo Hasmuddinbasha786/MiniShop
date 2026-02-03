@@ -3,29 +3,33 @@
 {% block title %}Brand List{% endblock title %}
 
 {% block sub_navbar %}
-<nav class="navbar navbar-expand-lg bg-light mt-2">
-    <div class="container-fluid">
-        <a href="{% url 'brandlist' %}" class="navbar-brand custom-style">Brand</a>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#brandNav"
-            aria-controls="brandNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="brandNav">
-            <div class="navbar-nav">
-                <a href="{% url 'brandlist' %}" class="nav-link active">Brand List</a>
-                <a href="{% url 'brandadd' %}" class="nav-link">Brand Add</a>
+<!-- navbar start -->
+    <nav class="navbar navbar-expand-lg bg-light mt-2">
+        <div class="container-fluid">
+            <!-- Brand logo -->
+            <a href="{% url 'brandlist' %}" class="navbar-brand custom-style">Brand</a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#brandNav"
+                aria-controls="brandNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="brandNav">
+                <div class="navbar-nav">
+                    <a href="#" class="nav-link active">Brand List</a>
+                    <a href="{% url 'brandadd' %}" class="nav-link">Brand Add</a>
+                </div>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
+<!-- navbar end -->
 {% endblock sub_navbar %}
 
 {% block content %}
+<!-- container start -->
 <div class="container mt-4">
     <div class="p-4" style="background-color: rgb(200, 220, 238); border-radius: 10px;">
-
+        
         <div class="row justify-content-center">
             <div class="col-md-11">
                 <h4 class="mb-3 text-center">Brand List</h4>
@@ -35,10 +39,11 @@
                         <strong>Total Brands:</strong> {{ total_count }}
                     </div>
 
+                    <!-- form start -->
                     <form method="get" class="d-flex gap-2">
                         <input type="text" name="q" value="{{ search_query }}" class="form-control form-control-sm"
-                            placeholder="Search brand...">
-
+                        placeholder="Search brand...">
+                        
                         <select name="per_page" class="form-select form-select-sm" style="width: auto;"
                             onchange="this.form.submit()">
                             <option value="5" {% if per_page == '5' %}selected{% endif %}>5</option>
@@ -49,8 +54,10 @@
 
                         <button type="submit" class="btn btn-primary btn-sm">Search</button>
                     </form>
+                    <!-- form end -->
                 </div>
 
+                <!-- table start -->
                 <table class="table table-bordered bg-white">
                     <thead class="table-light">
                         <tr>
@@ -67,6 +74,7 @@
                             <td>{{ brand.category }}</td>
                             <td>{{ brand.name }}</td>
                             <td>
+                                <!-- edit and delete buttons -->
                                 <div class="row">
                                     <div class="col-md-3">
                                         <a href="{% url 'brandedit' brand.id %}" class="btn btn-success w-100">Edit</a>
@@ -87,20 +95,21 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                <!-- table end -->
 
-                <!-- Pagination -->
+                <!-- Pagination start-->
                 {% if per_page != 'all' %}
                 <nav>
                     <ul class="pagination justify-content-center mt-3">
-
+                        
                         {% if brands.has_previous %}
                         <li class="page-item">
                             <a class="page-link"
                                 href="?page={{ brands.previous_page_number }}&per_page={{ per_page }}&q={{ search_query }}">Previous</a>
-                        </li>
-                        {% else %}
-                        <li class="page-item disabled">
-                            <span class="page-link">Previous</span>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">Previous</span>
                         </li>
                         {% endif %}
 
@@ -115,37 +124,37 @@
                             <span class="page-link">...</span>
                         </li>
                         {% endif %}
-
+                        
                         {% for num in brands.paginator.page_range %}
-                            {% if num >= brands.number|add:-2 and num <= brands.number|add:2 %} 
-                                {% if brands.number == num %}
-                                    <li class="page-item active">
-                                    <span class="page-link">{{ num }}</span>
-                                    </li>
+                        {% if num >= brands.number|add:-2 and num <= brands.number|add:2 %} 
+                        {% if brands.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
                                     {% else %}
                                     <li class="page-item">
                                         <a class="page-link"
-                                            href="?page={{ num }}&per_page={{ per_page }}&q={{ search_query }}">{{ num }}</a>
+                                        href="?page={{ num }}&per_page={{ per_page }}&q={{ search_query }}">{{ num }}</a>
                                     </li>
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}
-
-                            {% if brands.number < brands.paginator.num_pages|add:-2 %} <li class="page-item disabled">
-                                <span class="page-link">...</span>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link"
+                                    {% endif %}
+                                    {% endif %}
+                                    {% endfor %}
+                                    
+                                    {% if brands.number < brands.paginator.num_pages|add:-2 %} <li class="page-item disabled">
+                                        <span class="page-link">...</span>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link"
                                         href="?page={{ brands.paginator.num_pages }}&per_page={{ per_page }}&q={{ search_query }}">
                                         {{ brands.paginator.num_pages }}
                                     </a>
                                 </li>
                                 {% endif %}
-
+                                
                                 {% if brands.has_next %}
                                 <li class="page-item">
                                     <a class="page-link"
-                                        href="?page={{ brands.next_page_number }}&per_page={{ per_page }}&q={{ search_query }}">Next</a>
+                                    href="?page={{ brands.next_page_number }}&per_page={{ per_page }}&q={{ search_query }}">Next</a>
                                 </li>
                                 {% else %}
                                 <li class="page-item disabled">
@@ -155,9 +164,12 @@
                     </ul>
                 </nav>
                 {% endif %}
+                <!-- Pagination end-->
 
+                
             </div>
         </div>
     </div>
 </div>
+<!-- container end -->
 {% endblock content %}

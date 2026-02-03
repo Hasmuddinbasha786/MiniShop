@@ -3,13 +3,16 @@ from django.shortcuts import render,redirect
 from Products.models import *
 from django.core.paginator import Paginator
 from django.contrib import messages
+from django.utils.text import slugify
 
 
+# Base
 def base(request):
     return render(request,'base.html')
 
 
 
+# Category start
 
 def category_list(request):
     category_qs = Category.objects.all().order_by('-id')
@@ -85,16 +88,14 @@ def category_delete(request, id):
         messages.error(request,'Category Not Found.')
     return redirect('categorylist')
 
+# category end
 
 
 
 
 
 
-
-
-
-# Brand
+# Brand start
 
 def brand_list(request):
     brand_qs = Brand.objects.all().order_by('-id')
@@ -115,7 +116,6 @@ def brand_list(request):
         page_number = request.GET.get('page') 
         brands = paginator.get_page(page_number)
     
-
     return render(request,'brand/brand_list.html',{
         'brands': brands,  #paginated data
         'total_count': total_count, #total records
@@ -144,18 +144,6 @@ def brand_add(request):
     return render(request, 'brand/brand_add.html',{
         'categories' : categories,
     })
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def brand_edit(request, id):
@@ -200,24 +188,11 @@ def brand_delete(request, id):
         messages.error(request,'Brand Not Found.')
     return redirect('brandlist')
 
+# Brand end
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Product Start
 def product_list(request):
     products = Product.objects.all().order_by('-created_at')
     categories = Category.objects.all()
@@ -239,26 +214,32 @@ def product_list(request):
     })
 
 
-
 def product_add(request):
     categories = Category.objects.all()
     brands = Brand.objects.all()
 
     if request.method == 'POST':
         name = request.POST.get('name')
+        image = request.FILES.get('image')
         price = request.POST.get('price')
         description = request.POST.get('description')
         stock = request.POST.get('stock')
+        is_available = request.POST.get('is_available')
         category_id = request.POST.get('category')
         brand_id = request.POST.get('brand')
 
+        slug = slugify(name) #converts name to slug
+
         Product.objects.create(
             name = name,
+            image = image,
             price = price,
             description = description,
             stock = stock,
+            is_available=True if is_available == 'on' else False,
             category_id = category_id,
-            brand_id = brand_id
+            brand_id = brand_id,
+            slug = slug
         )
 
         return redirect('product_list')
@@ -268,3 +249,5 @@ def product_add(request):
         'brands' : brands,
     })
 
+
+# Product End

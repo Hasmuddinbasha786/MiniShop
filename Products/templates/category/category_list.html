@@ -3,51 +3,55 @@
 {% block title %}Category List{% endblock title %}
 
 {% block sub_navbar %}
-<nav class="navbar navbar-expand-lg bg-light mt-2">
-    <div class="container-fluid">
-        <a href="{% url 'categorylist' %}" class="navbar-brand custom-style">Category</a>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#categoryNav"
+<!-- navbar start -->
+    <nav class="navbar navbar-expand-lg bg-light mt-2">
+        <div class="container-fluid">
+            <a href="#" class="navbar-brand custom-style">Category</a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#categoryNav"
             aria-controls="categoryNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <div class="collapse navbar-collapse" id="categoryNav">
-            <div class="navbar-nav">
-                <a href="{% url 'categorylist' %}" class="nav-link active">Category List</a>
-                <a href="{% url 'categoryadd' %}" class="nav-link">Category Add</a>
+            <div class="collapse navbar-collapse" id="categoryNav">
+                <div class="navbar-nav">
+                    <a href="#" class="nav-link active">Category List</a>
+                    <a href="{% url 'categoryadd' %}" class="nav-link">Category Add</a>
+                </div>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
+<!-- navbar end -->
 {% endblock sub_navbar %}
 
+
 {% block content %}
+<!-- container start -->
 <div class="container mt-4">
     <div class="p-4" style="background-color: rgb(200, 220, 238); border-radius: 10px;">
-
+        
         <div class="row justify-content-center">
             <div class="col-md-11">
                 <h4 class="mb-3 text-center">Category List</h4>
-
-
+                
+                
                 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                     <div>
                         <strong>Total Categories:</strong> {{ total_count }}
                     </div>
-
+                    
                     <form method="get" class="d-flex gap-2">
                         <input type="text" name="q" value="{{ search_query }}" class="form-control form-control-sm"
                             placeholder="Search category...">
 
                         <select name="per_page" class="form-select form-select-sm" style="width: auto;"
-                            onchange="this.form.submit()">
+                        onchange="this.form.submit()">
                             <option value="5" {% if per_page == '5' %}selected{% endif %}>5</option>
                             <option value="10" {% if per_page == '10' %}selected{% endif %}>10</option>
                             <option value="15" {% if per_page == '15' %}selected{% endif %}>15</option>
                             <option value="all" {% if per_page == 'all' %}selected{% endif %}>All</option>
                         </select>
-
+                        
                         <button type="submit" class="btn btn-primary btn-sm">Search</button>
                     </form>
                 </div>
@@ -98,7 +102,7 @@
                         <li class="page-item">
                             <a class="page-link"
                                 href="?page={{ categories.previous_page_number }}&per_page={{ per_page }}">Previous</a>
-                        </li>
+                            </li>
                         {% else %}
                         <li class="page-item disabled">
                             <span class="page-link">Previous</span>
@@ -116,9 +120,9 @@
                             <span class="page-link">...</span>
                         </li>
                         {% endif %}
-
+                        
                         {% for num in categories.paginator.page_range %}
-                            {% if num >= categories.number|add:-2 and num <= categories.number|add:2 %} 
+                        {% if num >= categories.number|add:-2 and num <= categories.number|add:2 %} 
                                 {% if categories.number == num %} <li class="page-item active">
                                     <span class="page-link">{{ num }}</span>
                                     </li>
@@ -126,33 +130,33 @@
                                     <li class="page-item">
                                         <a class="page-link" href="?page={{ num }}&per_page={{ per_page }}">{{ num }}</a>
                                     </li>
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}
+                                    {% endif %}
+                                    {% endif %}
+                                    {% endfor %}
 
-                            {% if categories.number < categories.paginator.num_pages|add:-2 %} <li
-                                class="page-item disabled">
+                                    {% if categories.number < categories.paginator.num_pages|add:-2 %} <li
+                                    class="page-item disabled">
                                 <span class="page-link">...</span>
-                                </li>
-                                <li class="page-item">
+                            </li>
+                            <li class="page-item">
                                     <a class="page-link"
-                                        href="?page={{ categories.paginator.num_pages }}&per_page={{ per_page }}">
-                                        {{ categories.paginator.num_pages }}
-                                    </a>
-                                </li>
-                                {% endif %}
-
-                                {% if categories.has_next %}
-                                <li class="page-item">
-                                    <a class="page-link"
-                                        href="?page={{ categories.next_page_number }}&per_page={{ per_page }}">Next</a>
-                                </li>
-                                {% else %}
-                                <li class="page-item disabled">
+                                    href="?page={{ categories.paginator.num_pages }}&per_page={{ per_page }}">
+                                    {{ categories.paginator.num_pages }}
+                                </a>
+                            </li>
+                            {% endif %}
+                            
+                            {% if categories.has_next %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                href="?page={{ categories.next_page_number }}&per_page={{ per_page }}">Next</a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
                                     <span class="page-link">Next</span>
                                 </li>
                                 {% endif %}
-                    </ul>
+                            </ul>
                 </nav>
                 {% endif %}
 
@@ -160,4 +164,5 @@
         </div>
     </div>
 </div>
+<!-- container end -->
 {% endblock content %}

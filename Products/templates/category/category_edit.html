@@ -3,26 +3,28 @@
 {% block title %}Edit Category{% endblock title %}
 
 {% block sub_navbar %}
+<!-- navbar start -->
 <nav class="navbar navbar-expand-lg bg-light mt-2">
     <div class="container-fluid">
-        <a href="{% url 'categorylist' %}" class="navbar-brand custom-style">Brand Edit</a>
-
+        <a href="#" class="navbar-brand custom-style">Category Edit</a>
+        
         <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#categoryNav"
-            aria-controls="categoryNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        aria-controls="categoryNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <div class="collapse navbar-collapse" id="categoryNav">
-            <div class="navbar-nav ms-auto">
-                <a href="{% url 'brandlist' %}" class="nav-link">Brand List</a>
-                <a href="#" class="nav-link active">Edit Brand</a>
+    <div class="collapse navbar-collapse" id="categoryNav">
+        <div class="navbar-nav">
+            <a href="{% url 'brandlist' %}" class="nav-link">Category List</a>
             </div>
         </div>
     </div>
 </nav>
+<!-- navbar end -->
 {% endblock sub_navbar %}
 
 {% block content %}
+<!-- container start -->
 <div class="container mt-4 mb-4" >
     <div class="p-4" style="background-color: rgb(200, 220, 238); border-radius: 10px;">
         
@@ -31,19 +33,25 @@
         <form method="post" class="mb-4">
             {% csrf_token %}
             <div class="row g-3 justify-content-center">
+
+                <!-- category name  -->
                 <div class="col-md-6">
                     <input type="text" name="name" class="form-control" value="{{ category.name }}" required>
                 </div>
+
+                <!-- update and cancel buttons -->
                 <div class="col-md-3">
                     <button type="submit" class="btn btn-success w-100">Update</button>
                 </div>
                 <div class="col-md-3">
                     <a href="{% url 'categorylist' %}" class="btn btn-primary w-100">Cancel</a>
                 </div>
+
             </div>
         </form>
     </div>
 </div>
+<!-- container end -->
 
 
 {% endblock content %}
