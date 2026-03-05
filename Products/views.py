@@ -214,6 +214,46 @@ def product_list(request):
     })
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def brand_add(request):
+    categories = Category.objects.all()
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        category_id = request.POST.get('category')
+
+        if Brand.objects.filter(name=name).exists():
+            messages.error(request, "brand already exists")
+            return redirect('brandadd')
+
+        if name and category_id:
+            category = Category.objects.get(id=category_id)
+            Brand.objects.create(name = name, category = category)
+            messages.success(request,'brand Created Successfully')
+            return redirect('brandlist')
+        
+    return render(request, 'brand/brand_add.html',{
+        'categories' : categories,
+    })
+
+
+from django.utils.text import slugify
+
 def product_add(request):
     categories = Category.objects.all()
     brands = Brand.objects.all()
@@ -228,25 +268,36 @@ def product_add(request):
         category_id = request.POST.get('category')
         brand_id = request.POST.get('brand')
 
-        slug = slugify(name) #converts name to slug
+        if not name or not price or not stock or not category_id or not brand_id:
+            messages.error(request, "All required fields must be filled")
+            return redirect('product_add')
+
+        slug = slugify(name)
+
+        if Product.objects.filter(slug=slug).exists():
+            slug = slug + "-" + str(Product.objects.count() + 1)
+
+        category = Category.objects.get(id=category_id)
+        brand = Brand.objects.get(id=brand_id)
 
         Product.objects.create(
-            name = name,
-            image = image,
-            price = price,
-            description = description,
-            stock = stock,
+            name=name,
+            image=image,
+            price=price,
+            description=description,
+            stock=stock,
             is_available=True if is_available == 'on' else False,
-            category_id = category_id,
-            brand_id = brand_id,
-            slug = slug
+            category_id=category,
+            brand=brand,
+            slug=slug
         )
 
+        messages.success(request, "Product created successfully")
         return redirect('product_list')
-    
+
     return render(request, 'products/product_add.html',{
-        'categories' : categories,
-        'brands' : brands,
+        'categories': categories,
+        'brands': brands,
     })
 
 
