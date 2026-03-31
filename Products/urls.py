@@ -21,6 +21,7 @@ urlpatterns = [
 
 
     # Product
+    path('get-brands/',get_brands_by_category, name='get_brands'),
     path('product/list/',product_list,name='productlist'),
     path('product/add/',product_add,name='productadd'),
 ]

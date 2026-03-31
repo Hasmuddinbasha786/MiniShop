@@ -164,6 +164,25 @@ Product Add
             preview.src = URL.createObjectURL(file);
         }
     }
+
+
+    document.getElementById('category').addEventListener('change', function(){
+        let categoryId = this.value;
+        let brandDropdown = document.getElementById('brand');
+
+        brandDropdown.innerHTML = '<option>Loading...</option>';
+
+        fetch(`/get-brands/?category_id=${categoryId}`)
+        .then(response => response.json())
+        .then(data=> {
+            brandDropdown.innerHTML = '<option value = "">Select Brand</option>';
+
+            data.forEach(function(brand){
+                brandDropdown.innerHTML +=
+                ` <option value="${brand.id}">${brand.name}</option>`;
+            });
+        });
+    });
 </script>
 
 

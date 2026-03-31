@@ -4,6 +4,8 @@ from Products.models import *
 from django.core.paginator import Paginator
 from django.contrib import messages
 from django.utils.text import slugify
+from django.http import JsonResponse
+
 
 
 # Base
@@ -193,6 +195,14 @@ def brand_delete(request, id):
 
 
 # Product Start
+
+def get_brands_by_category(request):
+    category_id = request.GET.get('category_id')
+    brands = Brand.objects.filter(category_id = category_id).values('id', 'name')
+
+    return JsonResponse(list(brands), safe=False)
+
+
 def product_list(request):
     products = Product.objects.all().order_by('-created_at')
     categories = Category.objects.all()
@@ -214,46 +224,6 @@ def product_list(request):
     })
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def brand_add(request):
-    categories = Category.objects.all()
-
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        category_id = request.POST.get('category')
-
-        if Brand.objects.filter(name=name).exists():
-            messages.error(request, "brand already exists")
-            return redirect('brandadd')
-
-        if name and category_id:
-            category = Category.objects.get(id=category_id)
-            Brand.objects.create(name = name, category = category)
-            messages.success(request,'brand Created Successfully')
-            return redirect('brandlist')
-        
-    return render(request, 'brand/brand_add.html',{
-        'categories' : categories,
-    })
-
-
-from django.utils.text import slugify
-
 def product_add(request):
     categories = Category.objects.all()
     brands = Brand.objects.all()
@@ -270,7 +240,7 @@ def product_add(request):
 
         if not name or not price or not stock or not category_id or not brand_id:
             messages.error(request, "All required fields must be filled")
-            return redirect('product_add')
+            return redirect('productadd')
 
         slug = slugify(name)
 
@@ -287,13 +257,13 @@ def product_add(request):
             description=description,
             stock=stock,
             is_available=True if is_available == 'on' else False,
-            category_id=category,
+            category=category,
             brand=brand,
             slug=slug
         )
 
         messages.success(request, "Product created successfully")
-        return redirect('product_list')
+        return redirect('productlist')
 
     return render(request, 'products/product_add.html',{
         'categories': categories,
