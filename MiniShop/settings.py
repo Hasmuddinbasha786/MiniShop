@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = False
 # DEBUG = True
 
-ALLOWED_HOSTS = ['minishop-iama.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['bashaminishop-iama.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
